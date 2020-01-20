@@ -102,3 +102,32 @@ top_investors_plot <- top_investors_plot + theme(axis.title.x = element_text(col
 
 top_investors_plot
 
+#--------------------------------Ranking algorithm-------------------------------------
+college_rank_dataset <- read.csv(file.choose()) 
+head(college_rank_dataset)
+nrow(college_rank_dataset)
+college_rank_dataset1 <- college_rank_dataset[college_rank_dataset$year == 2015, ]
+nrow(college_rank_dataset1)
+college_rank_dataset1$score
+mentor_dataset <- read.csv(file.choose())
+summary(mentor_dataset)
+str(mentor_dataset)
+mentor_dataset$University <- as.character(mentor_dataset$University)
+mentor_dataset$Names <- as.character(mentor_dataset$Names)
+
+mentor_grade <- function(name)
+{
+  college_name <- mentor_dataset[mentor_dataset$Names == name, 2]
+  ranking_score <- college_rank_dataset1[college_rank_dataset1$institution == college_name, 13]
+  experience <- mentor_dataset[mentor_dataset$University == college_name, 3]
+  grade <- 0.5*ranking_score + 1.67*experience
+  return (grade)
+}
+
+resultant <- c(mentor_grade("Ervin Muric"),mentor_grade("Alexis Cuffolo"),mentor_grade("Maxime Jadot"),mentor_grade("Romain Pinte"),mentor_grade("Bastien Gallaire"),mentor_grade("Lucas Sotteau"),mentor_grade("Bertrand Billi"),mentor_grade("Tom Herenger"),mentor_grade("Gillian Benoy"),mentor_grade("Tom Cocqu"))
+mentor_dataset$points <- resultant
+mentor_dataset
+
+
+ranked_mentor_dataset <- mentor_dataset[order(-mentor_dataset$points), ]
+ranked_mentor_dataset
